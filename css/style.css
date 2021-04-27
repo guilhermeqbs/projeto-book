@@ -1,0 +1,17 @@
+body{
+    background-color: #7445BC;
+    margin: 0;
+    padding: 0;
+}
+
+.user,.password,.email{
+    font-weight: bold;
+    font-size: 25px;
+    font-family: Segoe UI;
+    color: #fff;
+    text-shadow: 0 1px 0.16px #000;
+}
+
+.container{
+    background-color: bisque;
+}
