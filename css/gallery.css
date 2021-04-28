@@ -19,3 +19,29 @@
     color: #fff;
     text-decoration: none;
 }
+
+.card{
+    width: 487px;
+    height: 625px;
+}
+
+.card img{
+    max-height: 517px;
+    max-width: 459px;
+}
+
+.card{
+    padding: 20px;
+    background-color: #F6F6F6;
+    box-shadow:0 12px 20px 0 rgb(0, 0, 0, 0.5);
+}
+
+.btn-circle{
+    width: 136px; 
+}
+.btn.add-image{
+    color: #7445BC;
+    font-family: Bahnschrift;
+    font-size: 150px;
+    border-radius:30%;
+}
