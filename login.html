@@ -15,31 +15,43 @@
 </head>
 <body>
     
-  
-    <h1 id="title">Cadastro do usuario</h1>
+    <div class="container d-flex flex-column align-items-center">
 
-    <form >
-      <div class="col-md-2 user" >
-        <label for="user" class="form-label"></label>Nome do usuario</label>
-        <input type="text" class="form-control" id="user">
-      </div>
-        <div class="col-md-2 email" >
-          <label for="email" class="form-label"></label>E-mail</label>
-          <input type="email" class="form-control" id="email">
+        <div class="row mt-5">
+            <h1 class="title">T3l3Tub3s</h1>
         </div>
-        <div class="col-md-2 password">
-          <label for="password" class="form-label">Senha</label>
-          <input type="password" class="form-control" id="password">
+        
+        <div class="row my-4">
+            <div class="col">
+                <figure class="figure">
+                    <img src="/img/teletubs.png" class="justify-content-center figure-img img-fluid rounded" alt="...">
+                </figure>
+            </div>
         </div>
-        <div class="col-12">
-            <button type="submit" class="btn button-submit">Cadastrar</button>
-        </div>
-      </form>
+        
+        <form class="row">
+            <div class="user" >
+                <label for="user" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="user">
+            </div>
 
-      <figure class="figure">
-        <img src="/img/teletubs.png" class="figure-img img-fluid rounded" alt="...">
-    </figure>
+            <div class="password mt-4">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+
+            <div class="text-end my-2">
+                <a id="create-account" href="/create_account.html">Criar conta</a>
+            </div>
+            <div class="button">
+                <button type="submit" class="btn button-submit">Entrar</button>
+            </div>
+                
+            
+        </form>
     
+            
+        </div>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
