@@ -7,34 +7,7 @@ body{
 .user,.password,.email{
     font-weight: bold;
     font-size: 25px;
-    font-family: Segoe UI;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #fff;
     text-shadow: 0 1px 0.16px #000;
-}
-
-
-
-/*
-    São pra testes apenas; depois excluir
-*/
-.color1{
-    background-color: black;
-}
-.color2{
-    background-color: brown;
-}
-.color3{
-    background-color: orangered;
-}
-.color4{
-    background-color: #E8AA3E;
-}
-.color5{
-    background-color: pink;
-}
-.color6{
-    background-color: purple;
-}
-.color7{
-    background-color: palegreen;
 }

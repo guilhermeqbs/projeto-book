@@ -1,38 +1,9 @@
-.name{
-    font-size: 80px;
-    font-family: Bahnschrift;
-    color: #fff;
-}
 .wallpaper{
     background-color: #000;
 }
+
 .img-fluid{
     opacity: 50%;
-}
-.col-2 img{
-    width: 100px;
-}
-.col-2 a, h1{
-    font-size: 50px;
-    font-family: Segoe UI;
-    font-weight: bold;
-    color: #fff;
-    text-decoration: none;
-}
-.card{
-    max-width: 487px;
-    max-height: 625px;
-}
-
-.card img{
-    max-height: 517px;
-    max-width: 459px;
-}
-
-.card{
-    padding: 20px;
-    background-color: #F6F6F6;
-    box-shadow:0 12px 20px 0 rgb(0, 0, 0, 0.5);
 }
 
 .margin-row, .title, .user-dashboard{
@@ -42,12 +13,52 @@
     margin-left: 4%;
 }
 
+.name{
+    font-size: 80px;
+    font-family: Bahnschrift;
+    color: #fff;
+}
+
+.info-user img{
+    width: 100px;
+}
+.info-user a, h1{
+    font-size: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.card{
+    max-width: 487px;
+    max-height: 625px;
+}
+.card img{
+    max-height: 517px;
+    max-width: 459px;
+}
+.card{
+    padding: 20px;
+    background-color: #F6F6F6;
+    box-shadow:0 12px 20px 0 rgb(0, 0, 0, 0.5);
+}
+.card-title{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+}
+.card-add{
+    width: 487px;
+    height: 625px;
+}
+
 .btn-circle{
     width: 136px; 
 }
 .btn.add-image{
     color: #7445BC;
     font-family: Bahnschrift;
-    font-size: 150px;
+    font-size: 160px;
     border-radius:30%;
 }
