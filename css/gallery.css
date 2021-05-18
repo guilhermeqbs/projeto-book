@@ -21,6 +21,7 @@
 
 .info-user img{
     width: 100px;
+    border-radius: 50%;
 }
 .info-user a, h1{
     font-size: 50px;

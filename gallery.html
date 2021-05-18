@@ -12,11 +12,10 @@
 
     <title>Galeria</title>
 </head>
-<body>
+<body onload="userLogged()">
     <div class="container-fluid">
-      
       <div class="wallpaper mb-5">
-        <img class="img-fluid"src="/img/ceiagf.jpg" alt="">
+        <img id="img-wallpaper" class="img-fluid"src="/img/wallpaper.jpg" alt="">
       </div>
 
       <div class="row w-100 user-dashboard position-absolute top-0 start-0">
@@ -24,9 +23,16 @@
               <p><sup>by</sup>Chiquinho Scarpa</p>    
           </div>
           <div class="info-user col-md-2 position-absolute top-0 end-0">
-              <img src="/img/user.png" alt="">
+              <img id="img-profile" src="/img/user.png" alt="">
               <div class="w-100"></div>
-              <a href="/login.html">sair</a>
+              
+              <form id="upload-form-profile" action="" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file-profile">
+                <input type="submit" value="Upload profile" name="submit">
+              </form>
+
+              <div class="w-100"></div>
+              <a id="logout" href="/login.html">sair</a>
           </div>
       </div>
 
@@ -104,6 +110,22 @@
           </div>
         </div>
       </div>
-  </div>
-</body>
+
+      <h3>Upload Wallpaper</h3>
+      
+     <form id="upload-form-wallpaper" action="" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file-wallpaper">
+                <input type="submit" value="Upload wallpaper" name="submit">
+              </form>
+
+      <div id="gallery">
+
+      </div>
+   </div>
+   
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script src="/js/gallery.js"></script>
+  </body>
 </html>

@@ -29,12 +29,12 @@
             </div>
         </div>
         
-        <form action="/gallery.html" class="row">
+        <form id="login-form" action="" class="row">
             <div class="user" >
-                <label for="user" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="user">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email">
             </div>
-
+        
             <div class="password mt-4">
                 <label for="password" class="form-label">Senha</label>
                 <input type="password" class="form-control" id="password">
@@ -48,8 +48,34 @@
             </div>
                 
         </form>
-    
-        </div>
+
+        <h3>Teste upload imigur</h3>
+      
+        <form id="upload-form" action="" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" id="file">
+          <input type="submit" value="Upload image" name="submit">
+        </form>
+        
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script>
+         // Your web app's Firebase configuration
+        var firebaseConfig = {
+        apiKey: "AIzaSyCJtCHtye7kifUSluz-rdiIuhryq40kMT0",
+        authDomain: "projeto-book.firebaseapp.com",
+        projectId: "projeto-book",
+        storageBucket: "projeto-book.appspot.com",
+        messagingSenderId: "293512059061",
+        appId: "1:293512059061:web:cfe037efdf57d2b13786fc"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+    </script>
+    <script src="/js/login.js"></script>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
