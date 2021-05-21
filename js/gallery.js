@@ -10,14 +10,16 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-const gallery = document.getElementById('gallery');
+var gallerySection = document.getElementById('gallery');
+var galleryRow = document.querySelectorAll('.gallery-row');
 var profile = document.getElementById('img-profile');
 var  wallpaper= document.getElementById('img-wallpaper');
 const fileNameProfile = 'profile.jpg';
 const fileNameWallpaper = 'wallpaper.jpg';
+var pathNameGalleryImage;
 
 //imprimir a imagem na tela
-const innerHtmlImage = (url, fileName) => {
+function loadImages(url, fileName){
   switch (fileName) {
     case fileNameProfile:
       profile.src = url;
@@ -25,12 +27,72 @@ const innerHtmlImage = (url, fileName) => {
     case fileNameWallpaper:
       wallpaper.src = url;
     break;
+    case pathNameGalleryImage:
+      var j = 0;
+      var i = 1;//contagem das imagens | Decidir se vai usar id ou classe para o upload das imagens
+      //Lembrando que quando for editar uma imagem, na hora do Upload tem que apagar a anterior, se não ela vai imprimir dnv.
+      //Da pra pegar o name usando meta data
+      firebase.storage().ref().child('users/'+pathNameGalleryImage)
+        .listAll().then(function(images){
+          images.items.forEach(function(image){
+            
+            //innerHtml(image);  Acada 3 itens criar uma nova row
+
+            image.getDownloadURL().then(function(url) {
+              console.log('List imagens: '+ image.name);
+              //mudar pra (resto da divisao por 3) == 0
+              if(i == 4){ //tenho que ver exatamente qual numero colocar
+                gallerySection.innerHTML += 
+                `<div class="row g-4 text-center my-5 margin-row gallery-row">
+                `;
+                galleryRow = document.querySelectorAll('.gallery-row');
+                j+=1;
+              }
+
+              galleryRow[j].innerHTML += 
+              `<div class="col col-md-4" id="col-card-${i}">
+
+                <form id="upload-form-gallery-${i}" action="" method="post" enctype="multipart/form-data">
+                  <input type="file" name="file" id="file-gallery-${i}">
+                  <input type="submit" value="Upload image" name="submit">
+                </form>
+                  
+                <div class="card h-100 w-100">
+                  <img src="${url}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">${image.name}</h5>
+                  </div>
+                </div>
+              </div>
+               
+            `;
+
+            var cardAdd = document.getElementById('col-card-0');
+            var newCard = document.getElementById(`col-card-${i}`);
+            newCard.insertAdjacentElement("afterend", cardAdd); 
+
+            i+=1;
+            }).catch(function(error) {
+              // Handle any errors
+              console.log(error.message);
+            });
+          })
+      }).catch(function(error){
+        console.log(error.message);
+      });
+
+    break;
     default:
     alert('Imagem não encontrada');
     break;
   }
 
   //gallery.innerHTML += `<img src="${url}" width="300" />`;
+}
+
+function galleryImage(pathNameGalleryImage){
+  checkExistsImage(pathNameGalleryImage);
+  loadImages('',pathNameGalleryImage);
 }
 
 function displayImage(fileName){
@@ -42,7 +104,7 @@ function displayImage(fileName){
 
       firebase.storage().ref().child(pathFile).getDownloadURL().then(function(url) {
     
-        innerHtmlImage(url, fileName);
+        loadImages(url,fileName);
 
       }).catch(function(error) {
         // Handle any errors
@@ -57,7 +119,7 @@ function displayImage(fileName){
 }
 
 function checkExistsImage(fileName){
-  var user = firebase.auth().currentUser;
+  var user = firebase.auth().currentUser;       //posso passar so o nome dapasta
   return firebase.storage().ref().child('users/'+user.uid+'/'+fileName);
 }
 
@@ -76,13 +138,14 @@ logout.addEventListener('click', () => {
 
 function profileImage(fileName){
 
-  if(checkExistsImage(fileName)!= null){
-    console.log('Existe profile.jpg');
+  if(checkExistsImage(fileName)){
+    console.log('Existe '+ fileName);
     displayImage(fileName);
   }
   else{
-    //Chamada do upload de imagem? | Exibir imagem padrão?
+    console.log('Não existe '+ fileName);
   }
+
   const formProfile = document.getElementById('upload-form-profile');
   formProfile.addEventListener('submit', function (ev){
       ev.preventDefault();  
@@ -110,12 +173,12 @@ function profileImage(fileName){
 
 function wallpaperImage(fileName){
 
-  if(checkExistsImage(fileName) ==! null){
-    console.log('Existe'+ fileName);
+  if(checkExistsImage(fileName)){
+    console.log('Existe '+ fileName);
     displayImage(fileName);
   }
   else{
-    //Chamada do upload de imagem? | Exibir imagem padrão?
+    console.log('Não existe '+ fileName);
   }
 
   const formWallpaper = document.getElementById('upload-form-wallpaper');
@@ -153,9 +216,11 @@ function userLogged(){
       // User is signed in.
       //Libera a exibição das fotos
       console.log('Usuario logado', user);
+      pathNameGalleryImage = `${user.uid}/gallery`;
 
       profileImage(fileNameProfile);
       wallpaperImage(fileNameWallpaper);
+      galleryImage(pathNameGalleryImage);
 
     } else {
       // No user is signed in.
