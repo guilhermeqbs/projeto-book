@@ -19,7 +19,8 @@ const register = (ev) =>{
     ev.preventDefault();
     firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
         .then(auth => {
-        console.log("fon");
+        
+        window.location.href = "/gallery.html";
         })
         .catch(error =>{
             console.log(error.message);

@@ -1,3 +1,15 @@
+// Your web app's Firebase configuration
+var firebaseConfig = {
+apiKey: "AIzaSyCJtCHtye7kifUSluz-rdiIuhryq40kMT0",
+authDomain: "projeto-book.firebaseapp.com",
+projectId: "projeto-book",
+storageBucket: "projeto-book.appspot.com",
+messagingSenderId: "293512059061",
+appId: "1:293512059061:web:cfe037efdf57d2b13786fc"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const formUp = document.getElementById('upload-form');
@@ -12,9 +24,9 @@ const login = (ev) =>{
 
   
   // Redireciona o usuário 
-  setTimeout(function() {
+  //setTimeout(function() {
   window.location.href = "/gallery.html";
-  }, 300);
+  //}, 300);
  
   })
   

@@ -10,6 +10,8 @@
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+const userName = document.getElementById('userName');
+
 var gallerySection = document.getElementById('gallery');
 var galleryRow = document.querySelectorAll('.gallery-row');
 var idImageOfGallery = 0; //
@@ -26,6 +28,7 @@ var formGalleryImage = document.getElementById('upload-form-gallery');
 var fileGalleryImage;
 var pathNameGalleryImage;
 const testeGallery = document.getElementById('teste-gallery');
+var titleImageGallery;
 
 var j = 0;
 var i = 0;
@@ -39,40 +42,32 @@ function loadImages(url, fileName){
       wallpaper.src = url;
     break;
     case pathNameGalleryImage:
-      //Lembrando que quando for editar uma imagem, na hora do Upload tem que apagar a anterior, se não ela vai imprimir dnv.
+
       firebase.storage().ref().child('users/'+pathNameGalleryImage)
         .listAll().then(function(images){
           images.items.forEach(function(image){
-            
-            //innerHtml(image);  Acada 3 itens criar uma nova row
 
               image.getDownloadURL().then(function(url) {
                 console.log('List imagens: '+ image.name);
                 
-                if(i%3 == 0 && i!=0){ //tenho que ver exatamente qual numero colocar
+                if(i%3 == 0 && i!=0){ 
                   gallerySection.innerHTML += 
                   `<div class="row g-4 text-center my-5 margin-row gallery-row">
                   `;
                   galleryRow = document.querySelectorAll('.gallery-row');
                   j+=1;
                 }
-                //onmouseenter="setIdImageOfGallery(${i})
+                
                 galleryRow[j].innerHTML += 
                 `<div class="col col-md-4" id="col-card-${i}">
-                  <!--
-                  <form " id="upload-form-gallery-${i}" action="" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" id="file-gallery-${i}">
-                    <input type="submit" value="Upload image-${i}" name="submit" id="submit-${i}">
-                  </form>
-                    -->
+                    <button onmouseenter="setIdImageOfGallery(${i})" onclick="deleteImagaGalley()">X</button> 
                   <div class="card h-100 w-100">
                     <img src="${url}" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title">${image.name.substring(0,image.name.length-4)}</h5>
+                      <h5 class="card-title" id="card-title-${i}" name="${image.name}">${image.name.substring(0,image.name.length-4)}</h5>
                     </div>
                   </div>
                 </div>
-                 
               `;
               i+=1;
               }).catch(function(error) {
@@ -87,33 +82,40 @@ function loadImages(url, fileName){
     break;
     
     default:
-     
-      //testeGallery.innerHTML += `<img src="${url}" width="300px">`
+
       galleryRow[j].innerHTML += 
       `<div class="col col-md-4" id="col-card-${i}">
-        <!--
-        <form " id="upload-form-gallery-${i}" action="" method="post" enctype="multipart/form-data">
-          <input type="file" name="file" id="file-gallery-${i}">
-          <input type="submit" value="Upload image-${i}" name="submit" id="submit-${i}">
-        </form>
-          -->
+        <button onmouseenter="setIdImageOfGallery(${i})" onclick="deleteImagaGalley()">X</button> 
         <div class="card h-100 w-100">
           <img src="${url}" class="card-img-top" alt="...">
           <div class="card-body">
-            <h5 class="card-title">${fileName.substring(8,fileName.length-4)}</h5>
+            <h5 class="card-title" id="card-title-${i}" name="${fileName.substring(8)}">${fileName.substring(8,fileName.length-4)}</h5>
           </div>
         </div>
       </div>
-       
     `;
     i+=1;
     break;
   }
 }
+
+function deleteImagaGalley(){
+  
+  titleImageGallery = document.getElementById(`card-title-${idImageOfGallery}`);
+  let fileName = titleImageGallery.attributes[2].value;
+
+  firebase.storage().ref().child('users/'+pathNameGalleryImage+'/'+fileName).delete().then(function() {
+    console.log("Deletado com sucesso");
+    window.location.reload(false);
+
+  }).catch(function(error) {
+    console.log(error.message);
+  });
+  
+}
 function setIdImageOfGallery(id){
   idImageOfGallery = id;
-  //formGalleryImage = document.getElementById(`upload-form-gallery-${idImageOfGallery}`);
- 
+
   console.log("Deu: "+ idImageOfGallery);
   
 }
@@ -182,7 +184,7 @@ function displayImage(fileName){
     if (user) {
       
       let pathFile = 'users/'+user.uid+'/'+fileName;
-
+    
       firebase.storage().ref().child(pathFile).getDownloadURL().then(function(url) {
     
         loadImages(url,fileName);
@@ -196,7 +198,6 @@ function displayImage(fileName){
       alert('Error de autentificação: Faça o login novamente');
     }
   });
-
 }
 
 function checkExistsImage(fileName){
@@ -213,7 +214,7 @@ function checkExistsImage(fileName){
 
 function findingDirectory(user,folderRef,fileName){
   if(folderRef.fullPath == 'users/'+user.uid+'/'+fileName){
-    console.log("Passou porra")
+    console.log("Achou o diretorio")
     displayImage(fileName);
   }
   else{
@@ -229,12 +230,10 @@ logout.addEventListener('click', () => {
     console.log('user signed out');
   })
   // Redireciona o usuário 
-  setTimeout(function() {
+  //setTimeout(function() {
     window.location.href = "/gallery.html";
-    }, 300);
+    //}, 300);
 });
-
-
 
 function wallpaperImage(fileName){
   checkExistsImage(fileName);
@@ -270,6 +269,8 @@ function userLogged(){
 
   firebase.auth().onAuthStateChanged(user =>{
     if (user) {
+
+      userName.innerHTML = `<p id="userName"> <sup>by</sup>${user.email}</p>`;
       // User is signed in.
       //Libera a exibição das fotos
       console.log('Usuario logado', user);
