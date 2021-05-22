@@ -12,12 +12,23 @@ firebase.initializeApp(firebaseConfig);
 
 var gallerySection = document.getElementById('gallery');
 var galleryRow = document.querySelectorAll('.gallery-row');
-var profile = document.getElementById('img-profile');
-var  wallpaper= document.getElementById('img-wallpaper');
-const fileNameProfile = 'profile.jpg';
-const fileNameWallpaper = 'wallpaper.jpg';
-var pathNameGalleryImage;
+var idImageOfGallery = 0; //
 
+var formProfile = document.querySelector('#upload-form-profile');
+var fileProfile;// Captura do file profile
+var profile = document.getElementById('img-profile');
+const fileNameProfile = 'profile.jpg';
+
+var  wallpaper= document.getElementById('img-wallpaper');
+const fileNameWallpaper = 'wallpaper.jpg';
+
+var formGalleryImage = document.getElementById('upload-form-gallery');
+var fileGalleryImage;
+var pathNameGalleryImage;
+const testeGallery = document.getElementById('teste-gallery');
+
+var j = 0;
+var i = 0;
 //imprimir a imagem na tela
 function loadImages(url, fileName){
   switch (fileName) {
@@ -28,71 +39,141 @@ function loadImages(url, fileName){
       wallpaper.src = url;
     break;
     case pathNameGalleryImage:
-      var j = 0;
-      var i = 1;//contagem das imagens | Decidir se vai usar id ou classe para o upload das imagens
       //Lembrando que quando for editar uma imagem, na hora do Upload tem que apagar a anterior, se não ela vai imprimir dnv.
-      //Da pra pegar o name usando meta data
       firebase.storage().ref().child('users/'+pathNameGalleryImage)
         .listAll().then(function(images){
           images.items.forEach(function(image){
             
             //innerHtml(image);  Acada 3 itens criar uma nova row
 
-            image.getDownloadURL().then(function(url) {
-              console.log('List imagens: '+ image.name);
-              //mudar pra (resto da divisao por 3) == 0
-              if(i == 4){ //tenho que ver exatamente qual numero colocar
-                gallerySection.innerHTML += 
-                `<div class="row g-4 text-center my-5 margin-row gallery-row">
-                `;
-                galleryRow = document.querySelectorAll('.gallery-row');
-                j+=1;
-              }
-
-              galleryRow[j].innerHTML += 
-              `<div class="col col-md-4" id="col-card-${i}">
-
-                <form id="upload-form-gallery-${i}" action="" method="post" enctype="multipart/form-data">
-                  <input type="file" name="file" id="file-gallery-${i}">
-                  <input type="submit" value="Upload image" name="submit">
-                </form>
-                  
-                <div class="card h-100 w-100">
-                  <img src="${url}" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">${image.name}</h5>
+              image.getDownloadURL().then(function(url) {
+                console.log('List imagens: '+ image.name);
+                
+                if(i%3 == 0 && i!=0){ //tenho que ver exatamente qual numero colocar
+                  gallerySection.innerHTML += 
+                  `<div class="row g-4 text-center my-5 margin-row gallery-row">
+                  `;
+                  galleryRow = document.querySelectorAll('.gallery-row');
+                  j+=1;
+                }
+                //onmouseenter="setIdImageOfGallery(${i})
+                galleryRow[j].innerHTML += 
+                `<div class="col col-md-4" id="col-card-${i}">
+                  <!--
+                  <form " id="upload-form-gallery-${i}" action="" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" id="file-gallery-${i}">
+                    <input type="submit" value="Upload image-${i}" name="submit" id="submit-${i}">
+                  </form>
+                    -->
+                  <div class="card h-100 w-100">
+                    <img src="${url}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">${image.name.substring(0,image.name.length-4)}</h5>
+                    </div>
                   </div>
                 </div>
-              </div>
-               
-            `;
-
-            var cardAdd = document.getElementById('col-card-0');
-            var newCard = document.getElementById(`col-card-${i}`);
-            newCard.insertAdjacentElement("afterend", cardAdd); 
-
-            i+=1;
-            }).catch(function(error) {
-              // Handle any errors
-              console.log(error.message);
-            });
+                 
+              `;
+              i+=1;
+              }).catch(function(error) {
+                // Handle any errors
+                console.log(error.message);
+              }); 
           })
       }).catch(function(error){
         console.log(error.message);
       });
 
     break;
+    
     default:
-    alert('Imagem não encontrada');
+     
+      //testeGallery.innerHTML += `<img src="${url}" width="300px">`
+      galleryRow[j].innerHTML += 
+      `<div class="col col-md-4" id="col-card-${i}">
+        <!--
+        <form " id="upload-form-gallery-${i}" action="" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" id="file-gallery-${i}">
+          <input type="submit" value="Upload image-${i}" name="submit" id="submit-${i}">
+        </form>
+          -->
+        <div class="card h-100 w-100">
+          <img src="${url}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">${fileName.substring(8,fileName.length-4)}</h5>
+          </div>
+        </div>
+      </div>
+       
+    `;
+    i+=1;
     break;
   }
+}
+function setIdImageOfGallery(id){
+  idImageOfGallery = id;
+  //formGalleryImage = document.getElementById(`upload-form-gallery-${idImageOfGallery}`);
+ 
+  console.log("Deu: "+ idImageOfGallery);
+  
+}
+function galleryImage(pathNameGalleryImage){
+ 
+  loadImages('',pathNameGalleryImage);
 
-  //gallery.innerHTML += `<img src="${url}" width="300" />`;
+  formGalleryImage.addEventListener('submit', function (ev){
+    ev.preventDefault();  
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // User is signed in.
+            //alert('Passou viu 1');
+            fileGalleryImage = document.getElementById('file-gallery').files[0];
+          
+            firebase.storage().ref().child('users/'+pathNameGalleryImage+'/'+fileGalleryImage.name).put(fileGalleryImage).then(function(s){
+            //console.log('Nome: '+ fileGalleryImage.name);
+            console.log('Sucess upload image: '+s);
+            //download image
+            displayImage('gallery/'+fileGalleryImage.name);
+          })
+          .catch((error) => {
+          //var errorCode = error.code;
+          console.log(error.message);
+          }); 
+        }else {
+          // No user is signed in.
+          alert('Error de autentificação: Faça o login novamente');
+        }
+      }) 
+      
+  });
 }
 
-function galleryImage(pathNameGalleryImage){
-  checkExistsImage(pathNameGalleryImage);
-  loadImages('',pathNameGalleryImage);
+function profileImage(fileName){
+  checkExistsImage(fileName);
+  
+  formProfile.addEventListener('submit', function (ev){
+      ev.preventDefault();  
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+              // User is signed in.
+            console.log('Ususario atual: '+ user.uid);
+            fileProfile = document.getElementById('file-profile').files[0];
+            firebase.storage().ref().child('users/'+user.uid+'/'+fileName).put(fileProfile).then(function(){
+              console.log('Sucess upload image');
+              //download image
+              displayImage(fileName);
+            })
+            .catch((error) => {
+            //var errorCode = error.code;
+            console.log(error.message);
+            });
+          }else {
+            // No user is signed in.
+            alert('Error de autentificação: Faça o login novamente');
+          }
+        })  
+  });
 }
 
 function displayImage(fileName){
@@ -119,8 +200,25 @@ function displayImage(fileName){
 }
 
 function checkExistsImage(fileName){
-  var user = firebase.auth().currentUser;       //posso passar so o nome dapasta
-  return firebase.storage().ref().child('users/'+user.uid+'/'+fileName);
+  let user = firebase.auth().currentUser;
+  firebase.storage().ref().child('users/'+user.uid).listAll().then(function(res) {
+    res.items.forEach(function(folderRef) {
+      findingDirectory(user,folderRef,fileName);
+    });
+    
+  }).catch(function(error) {
+    console.log(error.message);
+  });
+}
+
+function findingDirectory(user,folderRef,fileName){
+  if(folderRef.fullPath == 'users/'+user.uid+'/'+fileName){
+    console.log("Passou porra")
+    displayImage(fileName);
+  }
+  else{
+    console.log('Não existe '+ fileName);
+  }
 }
 
 // logout
@@ -136,51 +234,11 @@ logout.addEventListener('click', () => {
     }, 300);
 });
 
-function profileImage(fileName){
 
-  if(checkExistsImage(fileName)){
-    console.log('Existe '+ fileName);
-    displayImage(fileName);
-  }
-  else{
-    console.log('Não existe '+ fileName);
-  }
-
-  const formProfile = document.getElementById('upload-form-profile');
-  formProfile.addEventListener('submit', function (ev){
-      ev.preventDefault();  
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-              // User is signed in.
-            console.log('Ususario atual: '+ user.uid);
-            const fileProfile = document.getElementById('file-profile').files[0];
-            firebase.storage().ref().child('users/'+user.uid+'/'+fileName).put(fileProfile).then(function(){
-              console.log('Sucess upload image');
-              //download image
-              displayImage(fileName);
-            })
-            .catch((error) => {
-            //var errorCode = error.code;
-            console.log(error.message);
-            });
-          }else {
-            // No user is signed in.
-            alert('Error de autentificação: Faça o login novamente');
-          }
-        })  
-  });
-}
 
 function wallpaperImage(fileName){
-
-  if(checkExistsImage(fileName)){
-    console.log('Existe '+ fileName);
-    displayImage(fileName);
-  }
-  else{
-    console.log('Não existe '+ fileName);
-  }
-
+  checkExistsImage(fileName);
+  
   const formWallpaper = document.getElementById('upload-form-wallpaper');
   formWallpaper.addEventListener('submit', function (ev){
       ev.preventDefault();  
@@ -209,7 +267,6 @@ function wallpaperImage(fileName){
 }
 
 function userLogged(){
-  //var user = firebase.auth();
 
   firebase.auth().onAuthStateChanged(user =>{
     if (user) {
