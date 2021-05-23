@@ -32,6 +32,7 @@ var titleImageGallery;
 
 var j = 0;
 var i = 0;
+
 //imprimir a imagem na tela
 function loadImages(url, fileName){
   switch (fileName) {
@@ -46,10 +47,7 @@ function loadImages(url, fileName){
       firebase.storage().ref().child('users/'+pathNameGalleryImage)
         .listAll().then(function(images){
           images.items.forEach(function(image){
-
               image.getDownloadURL().then(function(url) {
-                console.log('List imagens: '+ image.name);
-                
                 if(i%3 == 0 && i!=0){ 
                   gallerySection.innerHTML += 
                   `<div class="row g-4 text-center my-5 margin-row gallery-row">
@@ -59,9 +57,9 @@ function loadImages(url, fileName){
                 }
                 
                 galleryRow[j].innerHTML += 
-                `<div class="col col-md-4" id="col-card-${i}">
-                    <button onmouseenter="setIdImageOfGallery(${i})" onclick="deleteImagaGalley()">X</button> 
+                `<div class="col col-md-4" id="col-card-${i} mb-5">
                   <div class="card h-100 w-100">
+                    <button class="position-absolute top-0 start-100 translate-middle btn-delete rounded-circle" onmouseenter="setIdImageOfGallery(${i})" onclick="deleteImagaGalley()">X</button> 
                     <img src="${url}" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title" id="card-title-${i}" name="${image.name}">${image.name.substring(0,image.name.length-4)}</h5>
@@ -72,11 +70,11 @@ function loadImages(url, fileName){
               i+=1;
               }).catch(function(error) {
                 // Handle any errors
-                console.log(error.message);
+                alert(error.message);
               }); 
           })
       }).catch(function(error){
-        console.log(error.message);
+        alert(error.message);
       });
 
     break;
@@ -84,9 +82,9 @@ function loadImages(url, fileName){
     default:
 
       galleryRow[j].innerHTML += 
-      `<div class="col col-md-4" id="col-card-${i}">
-        <button onmouseenter="setIdImageOfGallery(${i})" onclick="deleteImagaGalley()">X</button> 
+      `<div class="col col-md-4" id="col-card-${i} mb-5">         
         <div class="card h-100 w-100">
+          <button class="position-absolute top-0 start-100 translate-middle btn-delete rounded-circle" onmouseenter="setIdImageOfGallery(${i})" onclick="deleteImagaGalley()">X</button>
           <img src="${url}" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title" id="card-title-${i}" name="${fileName.substring(8)}">${fileName.substring(8,fileName.length-4)}</h5>
@@ -100,25 +98,20 @@ function loadImages(url, fileName){
 }
 
 function deleteImagaGalley(){
-  
   titleImageGallery = document.getElementById(`card-title-${idImageOfGallery}`);
   let fileName = titleImageGallery.attributes[2].value;
 
   firebase.storage().ref().child('users/'+pathNameGalleryImage+'/'+fileName).delete().then(function() {
-    console.log("Deletado com sucesso");
     window.location.reload(false);
-
   }).catch(function(error) {
-    console.log(error.message);
+    alert(error.message);
   });
   
 }
 function setIdImageOfGallery(id){
-  idImageOfGallery = id;
-
-  console.log("Deu: "+ idImageOfGallery);
-  
+  idImageOfGallery = id;  
 }
+
 function galleryImage(pathNameGalleryImage){
  
   loadImages('',pathNameGalleryImage);
@@ -128,22 +121,16 @@ function galleryImage(pathNameGalleryImage){
     
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            // User is signed in.
-            //alert('Passou viu 1');
+
             fileGalleryImage = document.getElementById('file-gallery').files[0];
-          
             firebase.storage().ref().child('users/'+pathNameGalleryImage+'/'+fileGalleryImage.name).put(fileGalleryImage).then(function(s){
-            //console.log('Nome: '+ fileGalleryImage.name);
             console.log('Sucess upload image: '+s);
-            //download image
             displayImage('gallery/'+fileGalleryImage.name);
           })
           .catch((error) => {
-          //var errorCode = error.code;
-          console.log(error.message);
+            alert(error.message);
           }); 
         }else {
-          // No user is signed in.
           alert('Error de autentificação: Faça o login novamente');
         }
       }) 
@@ -158,7 +145,7 @@ function profileImage(fileName){
       ev.preventDefault();  
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-              // User is signed in.
+              
             console.log('Ususario atual: '+ user.uid);
             fileProfile = document.getElementById('file-profile').files[0];
             firebase.storage().ref().child('users/'+user.uid+'/'+fileName).put(fileProfile).then(function(){
@@ -167,8 +154,7 @@ function profileImage(fileName){
               displayImage(fileName);
             })
             .catch((error) => {
-            //var errorCode = error.code;
-            console.log(error.message);
+              alert(error.message);
             });
           }else {
             // No user is signed in.
@@ -191,7 +177,7 @@ function displayImage(fileName){
 
       }).catch(function(error) {
         // Handle any errors
-        console.log(error.message);
+        alert(error.message);
       });
     }else {
       // No user is signed in.
@@ -208,7 +194,7 @@ function checkExistsImage(fileName){
     });
     
   }).catch(function(error) {
-    console.log(error.message);
+    alert(error.message);
   });
 }
 
@@ -218,7 +204,6 @@ function findingDirectory(user,folderRef,fileName){
     displayImage(fileName);
   }
   else{
-    console.log('Não existe '+ fileName);
   }
 }
 
@@ -247,15 +232,14 @@ function wallpaperImage(fileName){
               // User is signed in.
             console.log('Ususario atual: '+ user.uid);
             const fileWallpaper = document.getElementById('file-wallpaper').files[0];
-
             firebase.storage().ref().child('users/'+user.uid+'/'+fileName).put(fileWallpaper).then(function(){
               console.log('Sucess upload image');
               //download image
               displayImage(fileName);
             })
             .catch((error) => {
-            //var errorCode = error.code;
-            console.log(error.message);
+            
+              alert(error.message);
             });
           }else {
             // No user is signed in.
@@ -269,10 +253,9 @@ function userLogged(){
 
   firebase.auth().onAuthStateChanged(user =>{
     if (user) {
+     
+      userName.innerHTML = `<p id="userName"> <sup>by</sup>${user.email}</p>`
 
-      userName.innerHTML = `<p id="userName"> <sup>by</sup>${user.email}</p>`;
-      // User is signed in.
-      //Libera a exibição das fotos
       console.log('Usuario logado', user);
       pathNameGalleryImage = `${user.uid}/gallery`;
 

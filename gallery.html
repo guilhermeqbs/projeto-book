@@ -13,43 +13,69 @@
     <title>Galeria</title>
 </head>
 <body onload="userLogged()">
-    <div class="container-fluid">
+
+    <div class="container-fluid container-responsive">
       <div class="wallpaper mb-5">
         <img id="img-wallpaper" class="img-fluid"src="/img/wallpaper.jpg" alt="">
       </div>
-      
-      <form id="upload-form-wallpaper" action="" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file-wallpaper">
-        <input type="submit" value="Upload wallpaper" name="submit">
-      </form>
 
-      <div class="row w-100 user-dashboard position-absolute top-0 start-0">
-          <div class=" col-md-5 name" id="userName">
+      <div class="row user-dashboard position-absolute top-0 start-0 ">
+          <div class="name col-6" id="userName">
               <p><sup>by</sup></p>    
           </div>
-          <div class="info-user col-md-2 position-absolute top-0 end-0">
+          <div class="info-user col-md-2 position-absolute top-0 end-0 ">
+            <div>
               <img id="img-profile" src="/img/user.png" alt="">
               <div class="w-100"></div>
+              <a id="logout" href="/index.html">sair</a>
+            </div>
+            <form id="upload-form-profile" action="" method="post" enctype="multipart/form-data">                  
+              <input type="file" name="file" id="file-profile" class="add-icon">
+              <input type="submit" value="" name="submit" class="upload-icon">
+            </form>
               
-              <form id="upload-form-profile" action="" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" id="file-profile">
-                <input type="submit" value="Upload profile" name="submit">
-              </form>
-
-              <div class="w-100"></div>
-              <a id="logout" href="/login.html">sair</a>
           </div>
       </div>
 
-      <div class="title">
-        <h1>Meu Book</h1>
-      </div>
+      <div class="d-flex justify-content-between">
+        <div class="title">
+          <h1>Meu Book</h1>
+        </div>
 
+        <form id="upload-form-wallpaper" action="" method="post" enctype="multipart/form-data">
+          <h2>Adicionar/alterar o wallpaper</h2>
+          <input type="file" name="file" id="file-wallpaper" class="add-icon">
+          <input type="submit" value="" name="submit" class="upload-icon">
+        </form>
+      </div>
+      
       <form id="upload-form-gallery" action="" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file-gallery">
-        <input type="submit" value="Upload image" name="submit">
+        <h2>Adicionar imagem a galeria</h2>
+        <input type="file" name="file" id="file-gallery" class="add-icon">
+        <input  type="submit" value="" name="submit" class="upload-icon">
       </form>
       
+      <!--
+
+      <div id="teste-gallery mt-5">
+        <div class="row text-center my-5 margin-row">  
+          <div class="col">
+            <div class="card card-add position-relative">
+              <button class="position-absolute top-0 start-100 translate-middle btn-delete rounded-circle">X</button> 
+              <div class="card-logo position-absolute top-50 start-50 translate-middle">
+                <img src="/img/circulo.png" class="card-img btn-circle" alt="...">
+              </div>
+              <div class="card-img-overlay position-absolute top-50 start-50 translate-middle">
+                  <div class="card-body ">
+                      <button type="button" class="btn add-image">+</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      -->
       <section id="gallery">
 
         <div class="row g-4 text-center my-5 margin-row gallery-row"> 
@@ -57,10 +83,6 @@
         </div>
 
       </section>
-      <div id="teste-gallery">
-
-      </div>
-      
    </div>
    
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
