@@ -146,7 +146,6 @@ function profileImage(fileName){
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
               
-            console.log('Ususario atual: '+ user.uid);
             fileProfile = document.getElementById('file-profile').files[0];
             firebase.storage().ref().child('users/'+user.uid+'/'+fileName).put(fileProfile).then(function(){
               console.log('Sucess upload image');
@@ -200,7 +199,7 @@ function checkExistsImage(fileName){
 
 function findingDirectory(user,folderRef,fileName){
   if(folderRef.fullPath == 'users/'+user.uid+'/'+fileName){
-    console.log("Achou o diretorio")
+   
     displayImage(fileName);
   }
   else{
@@ -212,12 +211,10 @@ const logout = document.querySelector('#logout');
 logout.addEventListener('click', () => {
   ev.preventDefault();
   firebase.auth().signOut().then(() => {
-    console.log('user signed out');
+   
   })
-  // Redireciona o usuário 
-  //setTimeout(function() {
     window.location.href = "/gallery.html";
-    //}, 300);
+
 });
 
 function wallpaperImage(fileName){
@@ -230,7 +227,6 @@ function wallpaperImage(fileName){
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
               // User is signed in.
-            console.log('Ususario atual: '+ user.uid);
             const fileWallpaper = document.getElementById('file-wallpaper').files[0];
             firebase.storage().ref().child('users/'+user.uid+'/'+fileName).put(fileWallpaper).then(function(){
               console.log('Sucess upload image');
@@ -256,7 +252,6 @@ function userLogged(){
      
       userName.innerHTML = `<p id="userName"> <sup>by</sup>${user.email}</p>`
 
-      console.log('Usuario logado', user);
       pathNameGalleryImage = `${user.uid}/gallery`;
 
       profileImage(fileNameProfile);
